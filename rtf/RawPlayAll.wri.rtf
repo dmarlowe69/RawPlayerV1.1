@@ -1,0 +1,587 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}}
+{\colortbl ;\red0\green0\blue0;\red255\green255\blue255;}
+\viewkind4\uc1\pard\margl1728\margr1440\margt720\margb720\paperw11909\paperh16834\cf1\highlight2\fs18\par
+\par
+------------page 1--------------\par
+\par
+\par
+\pard\ri380\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360 **************************************\par
+;\par
+; RawPlayer V1.1\par
+;\par
+;**************************************\par
+\par
+.if Pass1 ;Only need to include these files\par
+        ;during assembler's first pass.\par
+.include geosSym ;get GEOS definitions\par
+.include geosMac ;get GEOS macro definitions\par
+\par
+;Sid Master Volume Control\par
+volCntrl==$D418\par
+.endif\par
+\par
+.psect ;program code section starts here\par
+      ;(GeoLinker will give this an address of $0400)\par
+;**************************************\par
+;\par
+;**************************************\par
+XX0400:\par
+ jsr UseSystemFont\par
+ jsr MouseUp\par
+ jsr XX0412\par
+ jsr XX042D\par
+ jsr XX04CF\par
+ jmp EnterDeskTop\par
+;**************************************\par
+;\par
+;**************************************\par
+XX0412:\par
+ lda #192\par
+ sta dispBufferOn\par
+ lda #\'dcXX0422 ; 4\par
+ sta r0H\par
+ lda #\'c4XX0422 ; 34\par
+ sta r0L\par
+ jsr GraphicsString\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+XX0422:\par
+ .byte $05,$02 ; NEWPATTERN,2\par
+ .byte $01     ; MOVEPENTO\par
+ .word $0000   ;\par
+ .byte $00     ;\par
+ .byte $03     ; RECTANGLETO\par
+ .word $013F   ; \par
+ .byte $C7     ;\par
+ .byte $00     ; end of graphics table\par
+;**************************************\par
+;\par
+;**************************************\par
+XX042D:\par
+ lda #\'dcXX0439 ; 4\par
+\par
+\pard\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\par
+\par
+------------page 2--------------\par
+\par
+\par
+\pard\ri380\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360  sta r0H\par
+ lda #\'c4XX0439 ; 57\par
+ sta r0L\par
+ jsr DoIcons\par
+ rts \par
+;**************************************\par
+;\par
+;**************************************\par
+XX0439:\par
+ .byte $01     ; number of icons\par
+ .word $0000   ; x position to place mouse\par
+ .byte $00     ; y position to place mouse\par
+ .word $0000   ; pointer to bit map\par
+ .byte $00     ; x position\par
+ .byte $00     ; y position\par
+ .byte $01     ; width in bytes\par
+ .byte $01     ; height in line\par
+ .word $0000   ; ptr to handler\par
+;**************************************\par
+;\par
+;**************************************\par
+XX0445:\par
+ lda #\'dcXX0451 ; 4\par
+ sta r0H\par
+ lda #\'c4XX0451 ; 81\par
+ sta r0L\par
+ jsr DoDlgBox\par
+ rts\par
+;**************************************\par
+; About Box\par
+;**************************************\par
+XX0451:\par
+ .byte $81\par
+ .byte $0E\par
+ .byte $0B\par
+ .byte $10\par
+ .byte $10\par
+ .word XX0468\par
+ .byte $0B\par
+ .byte $10\par
+ .byte $20\par
+ .word XX0483\par
+ .byte $0B\par
+ .byte $10\par
+ .byte $30\par
+ .word XX04A0\par
+ .byte $0B\par
+ .byte $10\par
+ .byte $40\par
+ .word XX04BE\par
+ .byte $00\par
+;**************************************\par
+; Level 0 Test Application\par
+;**************************************\par
+XX0468:\par
+ .byte $18\par
+\par
+\pard\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\par
+\par
+------------page 3--------------\par
+\par
+\par
+\pard\ri380\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360  .byte $4C,$65,$76,$65,$6C\par
+ .byte $20\par
+ .byte $30\par
+ .byte $20\par
+ .byte $74,$65,$73,$74\par
+ .byte $20\par
+ .byte $61,$70,$70,$6C,$69,$63,$61,$74,$69,$6F,$6E\par
+ .byte $1B\par
+ .byte $00\par
+;**************************************\par
+; Designed by Denton Marlowe\par
+;**************************************\par
+XX0483:\par
+ .byte $18\par
+ .byte $44,$65,$73,$69,$67,$6E,$65,$64\par
+ .byte $20\par
+ .byte $62,$79\par
+ .byte $20\par
+ .byte $44,$65,$6E,$74,$6F,$6E\par
+ .byte $20\par
+ .byte $4D,$61,$72,$6C,$6F,$77,$65\par
+ .byte $1B\par
+ .byte $00\par
+;**************************************\par
+; Version 1.0, Copyright 1988\par
+;**************************************\par
+XX04A0:\par
+ .byte $18\par
+ .byte $56,$45,$52,$53,$49,$4F,$4E\par
+ .byte $20\par
+ .byte $31,$2E,$30,$2C\par
+ .byte $20\par
+ .byte $43,$6F,$70,$79,$72,$69,$67,$68,$74\par
+ .byte $20\par
+ .byte $31,$39,$38,$38\par
+ .byte $1B\par
+ .byte $00\par
+;**************************************\par
+; Shadow Systems\par
+;**************************************\par
+XX04BE:\par
+ .byte $18\par
+ .byte $53,$68,$61,$64,$6F,$77\par
+ .byte $20\par
+ .byte $53,$79,$73,$74,$65,$6D,$73\par
+ .byte $1B\par
+ .byte $00\par
+;**************************************\par
+; Main Loop\par
+;**************************************\par
+XX04CF:\par
+ nop\par
+XX04D0:\par
+ lda #\'dcXX04EB ; 4\par
+ sta r0H\par
+ lda #\'c4XX04EB ; 235\par
+\par
+\pard\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\par
+\par
+------------page 4--------------\par
+\par
+\par
+\pard\ri380\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360  sta r0L\par
+ jsr DoDlgBox\par
+ lda r0L\par
+ cmp #2\par
+ beq XX04E7\par
+ jsr XX050F\par
+ clv\par
+ bvc XX04D0\par
+XX04E7:\par
+ jsr XX0445\par
+ rts \par
+;**************************************\par
+; Run Test APPLICATION\par
+; \'c4CANCEL\'dc \'c4OK\'dc\par
+;**************************************\par
+XX04EB:\par
+ .byte $81\par
+ .byte $0B\par
+ .byte $0E\par
+ .byte $14\par
+ .word XX04F8\par
+ .byte $02    ;\'c4CANCEL\'dc\par
+ .byte $02\par
+ .byte $47\par
+ .byte $01    ;\'c4OK\'dc\par
+ .byte $0F\par
+ .byte $46\par
+ .byte $00\par
+;**************************************\par
+; Run Test APPLICATION\par
+;**************************************\par
+XX04F8:\par
+ .byte $18\par
+ .byte $52,$75,$6E\par
+ .byte $20\par
+ .byte $54,$65,$73,$74\par
+ .byte $20\par
+ .byte $41,$50,$50,$4C,$49,$43,$41,$54,$49,$4F,$4E\par
+ .byte $1B\par
+ .byte $00\par
+;**************************************\par
+;\par
+;**************************************\par
+XX050F:\par
+ jsr XX0513\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+XX0513:\par
+; ptr to File Name Buffer\par
+ lda #\'dcXX063C ; 6\par
+ sta r6H\par
+ lda #\'c4XX063C ; 60\par
+ sta r6L\par
+; geso file type\par
+\par
+\pard\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\par
+\par
+------------page 5--------------\par
+\par
+\par
+\pard\ri380\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360  lda #3\par
+ sta r7L\par
+; Max Number Files to List\par
+ lda #8\par
+ sta r7H\par
+; prt to Permanet File Name\par
+ lda #\'dcXX0636 ; 6\par
+ sta r10H\par
+ lda #\'c4XX0636 ; 54\par
+ sta r10L\par
+ jsr FindFTypes\par
+;**************************************\par
+;\par
+;**************************************\par
+ lda r7H\par
+ cmp #8\par
+ beq XX0566\par
+ lda #6\par
+ sta XX063B\par
+ lda #60\par
+ sta XX063A\par
+XX053E:\par
+ lda XX063B\par
+ sta r6H\par
+ lda XX063A\par
+ sta r6L\par
+ ldy #0\par
+ lda (r6L),y\par
+ beq XX0566\par
+ jsr XX0567\par
+ cpx #0\par
+ bne XX0566\par
+ clc \par
+ lda #17\par
+ adc XX063A\par
+ sta XX063A\par
+ bcc XX0563\par
+ inc XX063B\par
+XX0563:\par
+ clv \par
+ bvc XX053E\par
+XX0566:\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+XX0567:\par
+ jsr XX0577\par
+ cpx #0\par
+ bne XX0576\par
+ lda r7H\par
+ sta XX06C6\par
+ jsr XX059D\par
+XX0576:\par
+ rts\par
+;**************************************\par
+\par
+\pard\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\par
+\par
+------------page 6--------------\par
+\par
+\par
+\pard\ri380\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360 ;\par
+;**************************************\par
+XX0577:\par
+ lda #1\par
+ sta r0L\par
+ lda #107\par
+ sta r2H\par
+ lda #255\par
+ sta r2L\par
+ lda #20\par
+ sta r7H\par
+ lda #0\par
+ sta r7L\par
+ jsr XX06C7\par
+ cpx #0\par
+ beq XX0599\par
+ cpx #11\par
+ beq XX059A\par
+ jsr XX0709\par
+XX0599:\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+XX059A:\par
+ ldx #0\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+XX059D:\par
+ lda #20\par
+ sta r0H\par
+ lda #3\par
+ sta r0L\par
+ jsr XX0619\par
+ jsr XX0620\par
+ lda XX06C6\par
+ bne XX05B2\par
+ lda #255\par
+XX05B2:\par
+ sta XX05E5+1\par
+ lda XX06C4\par
+ sta XX05CB+1\par
+ sta XX05D9+1\par
+ jsr XX05F5\par
+ jsr InitForIO\par
+XX05C4:\par
+ lda (r0L),y\par
+ and #15\par
+ sta volCntrl\par
+XX05CB:\par
+ ldx #3\par
+ jsr XX0614\par
+ lda (r0L),y\par
+ lsr a\par
+\par
+\pard\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\par
+\par
+------------page 7--------------\par
+\par
+\par
+\pard\ri380\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360  lsr a\par
+ lsr a\par
+ lsr a\par
+ sta volCntrl\par
+XX05D9:\par
+ ldx #3\par
+ jsr XX0614\par
+ iny \par
+ bne XX05C4\par
+ inc r0H\par
+ lda r0H\par
+XX05E5:\par
+ cmp #195\par
+ bcc XX05C4\par
+ lda #0\par
+ sta volCntrl\par
+ jsr DoneWithIO\par
+ jsr XX0605\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+XX05F5:\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+XX05F6:\par
+ jsr InitForIO\par
+ lda grcntrl1\par
+ and #239\par
+ sta grcntrl1\par
+ jsr DoneWithIO\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+XX0605:\par
+ jsr InitForIO\par
+ lda grcntrl1\par
+ ora #16\par
+ sta grcntrl1\par
+ jsr DoneWithIO\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+XX0614:\par
+ nop\par
+ dex\par
+ bne XX0614\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+XX0619:\par
+\par
+\pard\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\par
+\par
+------------page 8--------------\par
+\par
+\par
+\pard\ri380\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360  lda $1402 ; <---------------\par
+ sta XX06C4\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+XX0620:\par
+ lda XX06C4\par
+ cmp #255\par
+ beq XX062A\par
+ inc XX06C4\par
+XX062A:\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+XX062B:\par
+ lda XX06C4\par
+ cmp #0\par
+ beq XX0635\par
+ dec XX06C4\par
+XX0635:\par
+ rts\par
+;**************************************\par
+; Permanent File Name "RAW"\par
+;**************************************\par
+XX0636:\par
+ .byte $52 ; R\par
+ .byte $41 ; A\par
+ .byte $57 ; W\par
+ .byte $00 ; Null\par
+;**************************************\par
+;\par
+;**************************************\par
+XX063A:\par
+ .byte $00\par
+;**************************************\par
+;\par
+;**************************************\par
+XX06B3:\par
+ .byte $00\par
+;**************************************\par
+; File Name Buffer\par
+;**************************************\par
+XX063C:\par
+ .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00\par
+ .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00\par
+ .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00\par
+ .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00\par
+ .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00\par
+ .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00\par
+ .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00\par
+ .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00\par
+ .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00\par
+ .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00\par
+ .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00\par
+\par
+\pard\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\par
+\par
+------------page 9--------------\par
+\par
+\par
+\pard\ri380\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360  .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00\par
+ .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00\par
+ .byte $00,$00,$00,$00,$00,$00\par
+;**************************************\par
+;\par
+;**************************************\par
+XX06C4:\par
+ .byte $00\par
+;**************************************\par
+;\par
+;**************************************\par
+XX06C5:\par
+ .byte $14\par
+XX06C6:\par
+ .byte $14\par
+;**************************************\par
+;\par
+;**************************************\par
+XX06C7:\par
+ jsr FindFile\par
+ cpx #0\par
+ beq XX06D2\par
+ jsr XX0709\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+XX06D2:\par
+ lda r7H\par
+ pha\par
+ lda r7L\par
+ pha\par
+ lda #132\par
+ sta r9H\par
+ lda #0\par
+ sta r9L\par
+ jsr GetFHdrInfo\par
+ lda r0L\par
+ bne XX06EC\par
+ pla\par
+ pla\par
+ clv\par
+ bvc XX06F2\par
+XX06EC:\par
+ pla\par
+ sta r7L\par
+ pla\par
+ sta r7H\par
+XX06F2:\par
+ cpx #0\par
+ beq XX06FA\par
+ jsr XX0709\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+\par
+\pard\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\par
+\par
+------------page 10--------------\par
+\par
+\par
+\pard\ri380\tx720\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360\tx8360 XX06FA:\par
+ jsr ReadFile\par
+ cpx #0\par
+ beq XX0708\par
+ cpx #11\par
+ beq XX0708\par
+ jsr XX0709\par
+XX0708:\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+XX0709:\par
+ rts\par
+;**************************************\par
+;\par
+;**************************************\par
+\par
+\par
+\cf0\highlight0\par
+}
+ 
